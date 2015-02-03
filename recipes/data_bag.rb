@@ -35,14 +35,6 @@ Array(user_array).each do |i|
   u = data_bag_item(bag, i.gsub(/[.]/, '-'))
   username = u['username'] || u['id']
 
-  user_account username do
-    %w{comment uid gid home shell password system_user manage_home create_group
-        ssh_keys ssh_keygen non_unique}.each do |attr|
-      send(attr, u[attr]) if u[attr]
-    end
-    action Array(u['action']).map { |a| a.to_sym } if u['action']
-  end
-
   unless u['groups'].nil? || u['action'] == 'remove'
     u['groups'].each do |groupname|
       groups[groupname] = [] unless groups[groupname]
@@ -55,5 +47,19 @@ groups.each do |groupname, users|
   group groupname do
     members users
     append true
+  end
+end
+
+# only manage the subset of users defined
+Array(user_array).each do |i|
+  u = data_bag_item(bag, i.gsub(/[.]/, '-'))
+  username = u['username'] || u['id']
+
+  user_account username do
+    %w{comment uid gid home shell password system_user manage_home create_group
+        ssh_keys ssh_keygen non_unique}.each do |attr|
+      send(attr, u[attr]) if u[attr]
+    end
+    action Array(u['action']).map { |a| a.to_sym } if u['action']
   end
 end
