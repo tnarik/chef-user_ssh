@@ -45,8 +45,6 @@ end
 
 groups.each do |groupname, users|
   group groupname do
-    members users
-    append true
   end
 end
 
@@ -61,5 +59,12 @@ Array(user_array).each do |i|
       send(attr, u[attr]) if u[attr]
     end
     action Array(u['action']).map { |a| a.to_sym } if u['action']
+  end
+end
+
+groups.each do |groupname, users|
+  group groupname do
+    members users
+    append true
   end
 end
