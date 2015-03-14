@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: user
+# Cookbook Name:: user_ssh
 # Recipe:: data_bag
 #
-# Copyright 2011, Fletcher Nichol
+# Copyright (c) 2013-2015 Tnarik Innael
+# Copyright (c) 2011, Fletcher Nichol
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ end
 groups = {}
 
 # only manage the subset of users defined
-Array(user_array).each do |i|
+((user_array.size == 1 && user_array[0] == "*" ) ? data_bag(bag) : Array(user_array)).each do |i|
   u = data_bag_item(bag, i.gsub(/[.]/, '-'))
   username = u['username'] || u['id']
 
@@ -45,11 +46,12 @@ end
 
 groups.each do |groupname, users|
   group groupname do
+    action :create
   end
 end
 
 # only manage the subset of users defined
-Array(user_array).each do |i|
+((user_array.size == 1 && user_array[0] == "*" ) ? data_bag(bag) : Array(user_array)).each do |i|
   u = data_bag_item(bag, i.gsub(/[.]/, '-'))
   username = u['username'] || u['id']
 
@@ -66,5 +68,6 @@ groups.each do |groupname, users|
   group groupname do
     members users
     append true
+    action :create
   end
 end
