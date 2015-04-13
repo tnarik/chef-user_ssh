@@ -11,4 +11,4 @@ task :foodcritic do
   end
 end
 
-task :default => [:foodcritic, :test]
+task :default => [:foodcritic]
