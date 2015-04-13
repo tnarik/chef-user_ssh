@@ -1,7 +1,7 @@
 name             "user_ssh"
 maintainer       "Tnarik Innael"
 maintainer_email "tnarik@lecafeautomatique.co.uk"
-license          "Apache v2.0"
+license          "apache2"
 description      "A Chef recipe to manage user accounts and SSH keys from databags"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.1.0"
