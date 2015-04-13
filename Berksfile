@@ -1,7 +1,3 @@
-site :opscode
+source "https://supermarket.getchef.com"
 
 metadata
-
-group :integration do
-  cookbook 'user_test', :path => './test/cookbooks/user_test'
-end
