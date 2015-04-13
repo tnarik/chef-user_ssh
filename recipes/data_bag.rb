@@ -45,7 +45,8 @@ groups = {}
 end
 
 groups.each do |groupname, users|
-  group groupname do
+  group "#{groupname}_empty" do
+   group_name groupname
     action :create
   end
 end
@@ -55,19 +56,21 @@ end
   u = data_bag_item(bag, i.gsub(/[.]/, '-'))
   username = u['username'] || u['id']
 
-  user_account username do
-    %w{comment uid gid home shell password system_user manage_home create_group
+  user_ssh_account username do
+    %w{comment uid gid home home_passwd shell password system_user manage_home create_group
         ssh_keys ssh_keygen non_unique}.each do |attr|
       send(attr, u[attr]) if u[attr]
     end
     action Array(u['action']).map { |a| a.to_sym } if u['action']
   end
+
 end
 
 groups.each do |groupname, users|
-  group groupname do
+  group "#{groupname}_users" do
+    group_name groupname
     members users
     append true
-    action :create
+    action :manage
   end
 end
