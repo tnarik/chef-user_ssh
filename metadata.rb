@@ -6,7 +6,7 @@ description      'A Chef recipe to manage user accounts and SSH keys from databa
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 source_url       'https://github.com/tnarik/chef-user_ssh'
 issues_url       'https://github.com/tnarik/chef-user_ssh/issues'
-version          '0.1.0'
+version          '0.2.0'
 
 %w{user}.each do |cookbook|
   depends cookbook
