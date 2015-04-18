@@ -8,11 +8,12 @@ source_url       'https://github.com/tnarik/chef-user_ssh'
 issues_url       'https://github.com/tnarik/chef-user_ssh/issues'
 version          '0.2.0'
 
+#%w{user ssh}.each do |cookbook|
 %w{user}.each do |cookbook|
   depends cookbook
 end
 
-%w{ubuntu debian mac_os_x solaris suse omnios}.each do |os|
+%w{ubuntu debian mac_os_x solaris2 suse omnios}.each do |os|
   supports os
 end
 

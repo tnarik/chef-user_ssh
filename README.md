@@ -22,6 +22,11 @@ To use `recipe[user_ssh::data_bag]`, follow the same approach as for the [fnicho
 
 # Attributes
 
+To generate the value for the password, you can use:
+
+    openssl passwd -1 "theplaintextpassword"
+
+
 # Recipes
 
 

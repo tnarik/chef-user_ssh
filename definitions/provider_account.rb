@@ -26,8 +26,7 @@ class Chef
       @current_resource ||= Resource::UserSshAccount.new(new_resource.name)
 
       # New resource represents the chef DSL block that is being run (from a recipe for example)
-      @current_resource.home_passwd(new_resource.home_passwd ||
-          "#{node['user']['home_passwd_root']}/#{@current_resource.username}")
+      @current_resource.home_passwd( new_resource.home_passwd || user_home_passwd(@current_resource.username) )
 
       # Although you can reference @new_resource throughout the provider it is best to
       # only make modifications to the current version
@@ -44,6 +43,11 @@ class Chef
         @manage_home = false
         user_resource(:manage) 
       end
+    end
+
+    private
+    def user_home_passwd(username)
+      node['user']['home_passwd_root'].nil? ? nil : "#{node['user']['home_passwd_root']}/#{username}"
     end
   end
 end

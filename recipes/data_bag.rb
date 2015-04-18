@@ -64,6 +64,18 @@ end
     action Array(u['action']).map { |a| a.to_sym } if u['action']
   end
 
+#  ssh_config "test" do
+#    options ({
+#        User: 'this _user',
+#        Hostname: 'that hostname',
+#        IdentityFile: '/var/apps/somerandomkey',
+#        LocalForward: 'asomthing',
+#        Compression: 'yes'
+#    })
+#    user username
+#    action :add
+#  end
+
 end
 
 groups.each do |groupname, users|
