@@ -17,16 +17,25 @@
 # limitations under the License.
 #
 
+require 'etc'
+
 class Chef
   class Provider::UserSshAccount <  Provider::UserAccount
     def load_current_resource
       super
       # Here we keep the existing version of the resource
       # if none exists we create a new one from the resource we defined earlier
-      @current_resource ||= Resource::UserSshAccount.new(new_resource.name)
+      @current_resource ||= Resource::UserSshAccount.new( new_resource.name )
+      begin
+        pwnam = Etc.getpwnam(current_resource.username)
+      rescue ArgumentError => e
+        pwnam = nil
+      end
+      @home_passwd = pwnam.nil? ? nil : pwnam.dir
+      #@current_resource.home(pwnam.nil? ? nil : "/export"+::File.realpath(pwnam.dir) )
 
       # New resource represents the chef DSL block that is being run (from a recipe for example)
-      @current_resource.home_passwd( new_resource.home_passwd || user_home_passwd(@current_resource.username) )
+      @home_passwd_new = user_home_passwd( @current_resource.username )
 
       # Although you can reference @new_resource throughout the provider it is best to
       # only make modifications to the current version
@@ -34,14 +43,22 @@ class Chef
     end
 
     def action_create
+      # If home_passwd matches the expected one, preset new_resource to provide idempotency
+      if @home_passwd ==  @home_passwd_new then
+        # There is no need to create the folder now
+        new_resource.home ( @home_passwd_new )
+        @my_home = new_resource.home
+      end
+
       super
 
-      if @current_resource.home_passwd !=  @current_resource.home then
+      if !@home_passwd_new.nil? and
+          @home_passwd_new != new_resource.home then
         # Trigger the user_resource again with an updated home (not managed)
         # This should the entry in the /etc/passwd file
-        @my_home = @current_resource.home_passwd
+        @my_home = @home_passwd_new
         @manage_home = false
-        user_resource(:manage) 
+        user_resource(:manage)
       end
     end
 

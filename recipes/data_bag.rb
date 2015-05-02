@@ -57,7 +57,7 @@ end
   username = u['username'] || u['id']
 
   user_ssh_account username do
-    %w{comment uid gid home home_passwd shell password system_user manage_home create_group
+    %w{comment uid gid home shell password system_user manage_home create_group
         ssh_keys ssh_keygen non_unique}.each do |attr|
       send(attr, u[attr]) if u[attr]
     end
